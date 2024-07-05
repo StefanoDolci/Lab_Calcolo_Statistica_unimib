@@ -660,6 +660,13 @@ if p_value < 0.05:
     print("The fit is not good")
 else:
     print("The fit is good")
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+# Example of manually calculating Q^2 
+Q_squared_calc = 0.
+for x, y, ey in zip (x_coord, y_coord, sigma_y) :
+    Q_squared_calc = Q_squared_calc + pow ( (y - func (x, m_fit, q_fit)) /ey , 2 )  
+print ('Difference between Q-squared values:', Q_squared_calc - Q_squared) 
 
 
     

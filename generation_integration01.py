@@ -324,4 +324,28 @@ plt.ylabel("Frequency")
 plt.grid()
 plt.show()
     
-  
+
+    
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+#Example of toys experiment 
+N_toys = 10000
+
+Q_2_values = []
+
+for i in range(N_toys):
+    x_coord = uniform_range_list(0,10,10)
+    x_coord.sort()
+    y_coord = np.zeros(len(x_coord))
+    for i in range(len(x_coord)):
+        y_coord[i]= func(x_coord[i],a,b,c) + np.random.normal(0,10)
+    least_squares = LeastSquares(x_coord,y_coord,10,func)
+    m = Minuit(least_squares, a = 3, b = 2, c = 1)
+    m.migrad()
+    Q_2_values.append(m.fval)
+
+plt.hist(Q_2_values, bins=30, alpha=0.7, label='$Q^2$ values')
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.legend()
+plt.grid(True)
+plt.show()

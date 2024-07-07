@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 ###sturges rule
 def sturges(sample:list)->int:
-    return int(np.ceil(1+3.322 * np.log(len(sample))))
+    return int(np.ceil(1 + 3.322 * np.log(len(sample))))
 
 ###sturges rule with a number as input###
 def sturges(N: int)->int:

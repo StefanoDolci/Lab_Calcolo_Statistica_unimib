@@ -72,5 +72,23 @@ data = np.loadtxt("data.txt", delimiter=",")
 
 
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-#Poisson distribution stuff
+#Example of random walk 
+N_levels = 20
+k = 1000
+
+def random_walk(N,k):
+    steps = np.random.choice([-1,1], size=(k,N))
+    pos = np.cumsum(steps,axis=1)
+    final_pos = pos[: , -1]
+    return final_pos
+
+for N in range(1,N_levels+1):
+    final_pos = random_walk(N,k)
+    plt.hist(final_pos,bins=30,color="g")
+    plt.title(f"N={N}")
+    plt.xlabel("Posizione")
+    plt.ylabel("Pdf")
+
+plt.show
+
 

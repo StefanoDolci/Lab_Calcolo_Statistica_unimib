@@ -208,6 +208,27 @@ def gen_poiss_list(mean,N,seed=0.):
         randlist.append(gen_poiss(mean))
     return randlist
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+###Generate random numbers following a Poissonian with scipy
+from scipy.stats import poisson
+
+def generate_poisson_random_numbers(lmbda: float, N: int, seed: float = 0.) -> np.ndarray:
+    """
+    Generate N random numbers according to a Poisson distribution using scipy and numpy.
+
+    Parameters:
+    lmbda (float): The mean number of events (lambda) for the Poisson distribution.
+    N (int): The number of random numbers to generate.
+    seed (float): Seed for the random number generator.
+
+    Returns:
+    np.ndarray: Array of N random numbers following a Poisson distribution.
+    """
+    if seed != 0.:
+        np.random.seed(int(seed))
+    
+    return poisson.rvs(mu=lmbda, size=N
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 ###Generate random numbers following a Poissonian with numpy###
 def generate_poisson_random_numbers(lmbda, N=1):
     """
@@ -257,7 +278,7 @@ def HOM_integration (f, xMin: float, xMax: float, yMax: float, N: int=10000, see
     area_rett = (xMax-xMin) * yMax
     fraction = float(points_under)/ float (N)
     integral_value = area_rett * fraction
-    integral_uncertainty = area_rett**2 * fraction * (1-fraction) / N
+    integral_uncertainty = area_rett**2 * fraction * (1-fraction) / N #or  integral_uncertainty = area_rett * math.sqrt(fraction * (1 - fraction) / N)
     return integral_value,math.sqrt(integral_uncertainty)
     
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -350,7 +371,7 @@ plt.show()
 
     
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-#Example of toys experiment 
+#Example of TOYS experiment 
 N_toys = 10000
 
 Q_2_values = []

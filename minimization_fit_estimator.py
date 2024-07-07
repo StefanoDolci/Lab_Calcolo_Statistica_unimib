@@ -53,17 +53,18 @@ plt.show()
 ###Fit for binned distribution, using binned likelihood###
 
 ###the model need to be the cdf of the binned function in analysis
-def model (bin_edges,N_signal,mu,sigma,N_backgroud,tau):
+def model (bin_edges N_signal, mu, sigma, N_backgroud, tau):
     return N_signal * norm.cdf(bin_edges,mu,sigma) + N_background*expon.cdf(bin_edges,0,tau)
 
 
 from iminuit import Minuit
 from iminuit.cost import ExtendedBinnedNLL
+
 my_cost_func = ExtendedBinnedNLL(bin_content, bin_edges, model)
 ####ExtendedBinnedNLL extends the BinnedNLL by allowing for an additional parameter representing the expected number of background events in each bin.###
 #This additional parameter accounts for background contributions or other external sources of events that are not explicitly modeled by the fit.
 ###give clues for parameters helping minuit
-my_minuit = Minuit(my_cost_func,N_signal = N_evnt, mu = samle_mean, sigma = sample_sigma, N_backgroud=N_evnt,tau= )
+my_minuit = Minuit(my_cost_func, N_signal = N_evnt, mu = samle_mean, sigma = sample_sigma, N_backgroud=N_evnt,tau= )
 my_minuit.limits['','',''] = (0,None) ##this bounds parameters to be positive/negative
 my_minuit.migrad()
 my_minuit.minos()
@@ -71,6 +72,8 @@ print(my_minuit.valid)
 display(my_minuit)
 print(my_minuit.params) ##prints parameters and unc
 print(my_minuit.covariance)###prints covariance matrix
+for par, val, err in zip (my_minuit.parameters, my_minuit.values, my_minuit.errors) :
+    print(f'{par} = {val:.3f} +/- {err:.3f}') # formatted output
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #Example of helping minuit with a partial fit
 
@@ -600,9 +603,6 @@ def TestCompatibilita(x0:float, sigma0:float, x1:float, sigma1:float = 0) -> flo
 #example of toy experiment with fit Q2 and p-value 
 def gen_y(x_values,sigma,p0,p1):
     return model(x_values,p0,p1) + np.random.normal(0,sigma,len(x_values))
-
-
-
 
 N_toys = 1000
 Q_2_values = []

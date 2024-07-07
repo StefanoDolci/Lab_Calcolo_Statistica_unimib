@@ -69,3 +69,8 @@ data = np.genfromtxt("data.txt")
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 ##Load data using numpy if data.txt are CSV format
 data = np.loadtxt("data.txt", delimiter=",")
+
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+#Poisson distribution stuff
+

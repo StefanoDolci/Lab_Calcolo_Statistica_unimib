@@ -41,6 +41,20 @@ def TAC_range(f, xMin: float, xMax: float,yMax: float, seed:float=0.):
         y = random.uniform(0,yMax)
     return x
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+def generate_TAC (f, xMin, xMax, yMax, N, seed = 0.) :
+    '''
+    generazione di N numeri pseudo-casuali
+    con il metodo try and catch, in un certo intervallo,
+    a partire da un determinato seed
+    '''
+    if seed != 0. : random.seed (float (seed))
+    randlist = []
+    for i in range (N):
+        # Return the next random floating point number in the range 0.0 <= X < 1.0
+        randlist.append (TAC_range (f, xMin, xMax, yMax))
+    return randlist
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 ###Generate a list of N random number according to the TAC method###
 def TAC_range_list(f,xMin: float, xMax: float, yMax: float,N: int,seed: float = 0.)-> list[float]:
     if seed!=0. : random.seed(float(seed))
@@ -53,8 +67,9 @@ def TAC_range_list(f,xMin: float, xMax: float, yMax: float,N: int,seed: float = 
             y = random.uniform(0,yMax)
         randlist.append(x)
     return randlist
-# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 ###Generate a random number according to the CLT on a given interval###
 def CLT_range(xMin: float,xMax: float,N_sum: int=100) ->float:
     y = 0.
@@ -207,12 +222,20 @@ def generate_poisson_random_numbers(lmbda, N=1):
     """
     return np.random.poisson(lmbda, N)
 
-
-
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 ###Library for Integration methods 
 
+from scipy.integrate import quad
+# definition of a polinomial function
+def polin(x): return x**2 + x + 1
+
+area = quad (polin, 0., 4.)
+print ('area = ', area[0])
+print ('absolute error estimate = ', area[1])
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
 #Calc of a definite integral of function f with hit or miss method, f must be positive and continuos in the definite interval###
 def HOM_integration (f, xMin: float, xMax: float, yMax: float, N: int=10000, seed: float=0.) ->tuple[float,float]:
@@ -349,3 +372,42 @@ plt.ylabel('Frequency')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+#Example of inverse func method for gen pseudo random numbers
+import random
+from typing import Callable, List
+
+def inverse_function_algorithm(F_inv: Callable[[float], float], N: int, seed: float = 0.) -> List[float]:
+    """
+    Generate a list of N random numbers according to the Inverse Function Algorithm.
+
+    Parameters:
+    F_inv (Callable[[float], float]): The inverse of the cumulative distribution function.
+    N (int): Number of random numbers to generate.
+    seed (float): Seed for the random number generator.
+
+    Returns:
+    List[float]: List of N random numbers.
+    """
+    if seed != 0.:
+        random.seed(float(seed))
+    
+    randlist = []
+    for _ in range(N):
+        y = random.uniform(0, 1)
+        x = F_inv(y)
+        randlist.append(x)
+    
+    return randlist
+
+# Example usage:
+# Let's assume we want to generate random numbers from an exponential distribution with lambda = 1.
+# The CDF of the exponential distribution is F(x) = 1 - e^(-x), and its inverse is F_inv(y) = -ln(1 - y).
+import math
+def exp_inverse_cdf(y: float) -> float:
+    return -math.log(1 - y)
+# Generate 10 random numbers from the exponential distribution
+random_numbers = inverse_function_algorithm(exp_inverse_cdf, 10, seed=42)
+print(random_numbers)
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
